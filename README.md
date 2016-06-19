@@ -1,5 +1,8 @@
 # Generic Arrays in PHP
 
+[![codecov](https://codecov.io/gh/KarimGeiger/Generics/branch/master/graph/badge.svg)](https://codecov.io/gh/KarimGeiger/Generics)
+[![Build Status](https://travis-ci.org/KarimGeiger/Generics.svg?branch=master)](https://travis-ci.org/KarimGeiger/Generics)
+
 PHP is currently stacking up some missing language features. With PHP 7 we've even got scalar type definitions now.
 
 But there's one pretty important thing missing: As soon as you start working with arrays, everything gets lost. You then
