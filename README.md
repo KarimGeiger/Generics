@@ -1,4 +1,4 @@
-# Generics in PHP
+# Generic Arrays in PHP
 
 PHP is currently stacking up some missing language features. With PHP 7 we've even got scalar type definitions now.
 
