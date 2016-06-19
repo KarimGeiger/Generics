@@ -40,7 +40,7 @@ $newList = new Generics\GenericDictionary(YourObject::class, 'string');
 $newList['key'] = new YourObject();
 ```
 
-If you're familiar with other languages, think of it as ``Generic<TValue, TKey>(data);``.
+If you're familiar with other languages, think of it as ``GenericDictionary<TValue, TKey>(data);``.
 
 ## Features
 
