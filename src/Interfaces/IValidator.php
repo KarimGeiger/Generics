@@ -5,11 +5,17 @@ namespace Generics\Interfaces;
 interface IValidator
 {
     /**
-     * Validates
-     * @param $value
+     * Validates value.
+     * 
+     * @param mixed $value
      * @return bool
      */
     public function isValid($value) : bool;
 
+    /**
+     * Get name of validator.
+     * 
+     * @return string
+     */
     public function getName() : string;
 }

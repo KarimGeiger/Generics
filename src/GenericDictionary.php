@@ -55,7 +55,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param string $TKey Type for each key. This will be returned instead of TKey.
      * @param array|Iterator|GenericDictionary $data Data to fill. Must be compatible.
      */
-    public function __construct(string $TValue, $TKey = 'integer', $data = null)
+    public function __construct(string $TValue, string $TKey = 'integer', $data = null)
     {
         $this->valueValidator = $this->getValidatorFor($TValue);
         $this->keyValidator = $this->getValidatorFor($TKey);
@@ -81,7 +81,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param GenericDictionary|Iterator|array $other
      * @return bool
      */
-    public function isCompatible($other)
+    public function isCompatible($other) : bool
     {
         try {
             if ($other instanceof GenericDictionary) {
@@ -103,7 +103,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param string $type
      * @return IValidator
      */
-    protected function getValidatorFor(string $type)
+    protected function getValidatorFor(string $type) : IValidator
     {
         $supportedTypes = self::SUPPORTED_TYPES;
 
@@ -184,7 +184,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @return array [TKey => TValue]
      */
-    public function toArray()
+    public function toArray() : array
     {
         return $this->items;
     }
@@ -195,7 +195,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param TValue $value
      * @return bool
      */
-    public function has($value)
+    public function has($value) : bool
     {
         return in_array($value, $this->items);
     }
@@ -245,7 +245,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @return bool
      */
-    public function valid()
+    public function valid() : bool
     {
         return $this->key() !== null;
     }
@@ -264,7 +264,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param TKey $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key) : bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -347,7 +347,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @return int
      */
-    public function count()
+    public function count() : int
     {
         return count($this->items);
     }
@@ -357,7 +357,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @return string
      */
-    public function serialize()
+    public function serialize() : string
     {
         return $this->__toString();
     }
@@ -377,7 +377,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return json_encode($this->items);
     }
