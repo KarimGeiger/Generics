@@ -14,7 +14,7 @@ use Generics\Validators\StringValidator;
 use Iterator;
 use Serializable;
 
-class Generic implements ArrayAccess, Countable, Iterator, Serializable
+class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializable
 {
     /**
      * @var IValidator
@@ -53,7 +53,7 @@ class Generic implements ArrayAccess, Countable, Iterator, Serializable
      *
      * @param string $TValue Type for each item. This will be returned instead of TValue.
      * @param string $TKey Type for each key. This will be returned instead of TKey.
-     * @param array|Iterator|Generic $data Data to fill. Must be compatible.
+     * @param array|Iterator|GenericDictionary $data Data to fill. Must be compatible.
      */
     public function __construct(string $TValue, $TKey = 'integer', $data = null)
     {
@@ -78,13 +78,13 @@ class Generic implements ArrayAccess, Countable, Iterator, Serializable
     /**
      * Validate if both Generics or arrays are compatible.
      *
-     * @param Generic|Iterator|array $other
+     * @param GenericDictionary|Iterator|array $other
      * @return bool
      */
     public function isCompatible($other)
     {
         try {
-            if ($other instanceof Generic) {
+            if ($other instanceof GenericDictionary) {
                 return $this->getTypes() === $other->getTypes();
             } elseif (is_array($other) || $other instanceof Iterator) {
                 foreach ($other as $key => $value) {
@@ -134,7 +134,7 @@ class Generic implements ArrayAccess, Countable, Iterator, Serializable
      * @param TValue $value
      * @return $this
      */
-    public function push($value) : Generic
+    public function push($value) : GenericDictionary
     {
         $this->offsetSet(null, $value);
 
@@ -148,7 +148,7 @@ class Generic implements ArrayAccess, Countable, Iterator, Serializable
      * @param TValue $value
      * @return $this
      */
-    public function put($key, $value) : Generic
+    public function put($key, $value) : GenericDictionary
     {
         $this->offsetSet($key, $value);
 
@@ -158,17 +158,17 @@ class Generic implements ArrayAccess, Countable, Iterator, Serializable
     /**
      * Merge two arrays into current Generic. This will fail if some keys or values are of a different type.
      *
-     * @param array|Iterator|Generic $array
+     * @param array|Iterator|GenericDictionary $array
      * @return $this
      * @throws InvalidTypeException
      */
-    public function merge($array) : Generic
+    public function merge($array) : GenericDictionary
     {
         if (!$this->isCompatible($array)) {
             throw new InvalidTypeException('You cannot merge this array, since it contains incompatible types.');
         }
 
-        if ($array instanceof Generic) {
+        if ($array instanceof GenericDictionary) {
             $this->items = array_merge($this->items, $array->items);
         } else {
             foreach ($array as $key => $value) {
