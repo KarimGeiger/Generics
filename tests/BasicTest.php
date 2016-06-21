@@ -3,13 +3,13 @@
 namespace Tests;
 
 use Generics\Exceptions\InvalidTypeException;
-use Generics\GenericDictionary;
+use Generics\Dictionary;
 
 class BasicTest extends TestCase
 {
     public function testDefaultScenario()
     {
-        $generic = new GenericDictionary('string', 'integer', [1 => 'bar']);
+        $generic = new Dictionary('string', 'integer', [1 => 'bar']);
         $this->assertEquals(['integer', 'string'], $generic->getTypes());
 
         $generic->put(2, 'foo');
@@ -30,7 +30,7 @@ class BasicTest extends TestCase
 
     public function testArrayBehaviour()
     {
-        $generic = new GenericDictionary('string', 'string', ['foo' => 'foo', 'bar' => 'bar']);
+        $generic = new Dictionary('string', 'string', ['foo' => 'foo', 'bar' => 'bar']);
 
         $data = ['foo' => 'foo', 'bar' => 'bar'];
         foreach ($generic as $k => $v) {
@@ -66,9 +66,9 @@ class BasicTest extends TestCase
             4 => 'more',
             5 => 'data'
         ];
-        $generic = new GenericDictionary('string', 'integer', $expected);
+        $generic = new Dictionary('string', 'integer', $expected);
         $new = unserialize(serialize($generic));
-        $this->assertInstanceOf(GenericDictionary::class, $new);
+        $this->assertInstanceOf(Dictionary::class, $new);
         $this->assertEquals($expected, $new->toArray());
 
         $this->assertEquals('{"1":"bar","2":"foo","3":"some","4":"more","5":"data"}', (string)$generic);
@@ -76,15 +76,15 @@ class BasicTest extends TestCase
 
     public function testMergeSelf()
     {
-        $generic = new GenericDictionary('string', 'string', ['foo' => 'bar']);
-        $generic->merge(new GenericDictionary('string', 'string', ['baz' => 'foo']));
+        $generic = new Dictionary('string', 'string', ['foo' => 'bar']);
+        $generic->merge(new Dictionary('string', 'string', ['baz' => 'foo']));
         $this->assertEquals(['foo' => 'bar', 'baz' => 'foo'], $generic->toArray());
     }
 
     public function testRecursion()
     {
-        $generic = new GenericDictionary(GenericDictionary::class);
-        $generic[] = new GenericDictionary('string');
+        $generic = new Dictionary(Dictionary::class);
+        $generic[] = new Dictionary('string');
         $generic[0][] = 'foo';
 
         $this->assertEquals('foo', $generic[0][0]);

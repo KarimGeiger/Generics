@@ -14,7 +14,7 @@ use Generics\Validators\StringValidator;
 use Iterator;
 use Serializable;
 
-class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializable
+class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
 {
     /**
      * @var IValidator
@@ -53,7 +53,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      *
      * @param string $TValue Type for each item. This will be returned instead of TValue.
      * @param string $TKey Type for each key. This will be returned instead of TKey.
-     * @param array|Iterator|GenericDictionary $data Data to fill. Must be compatible.
+     * @param array|Iterator|Dictionary $data Data to fill. Must be compatible.
      */
     public function __construct(string $TValue, string $TKey = 'integer', $data = null)
     {
@@ -78,13 +78,13 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
     /**
      * Validate if both Generics or arrays are compatible.
      *
-     * @param GenericDictionary|Iterator|array $other
+     * @param Dictionary|Iterator|array $other
      * @return bool
      */
     public function isCompatible($other) : bool
     {
         try {
-            if ($other instanceof GenericDictionary) {
+            if ($other instanceof Dictionary) {
                 return $this->getTypes() === $other->getTypes();
             } elseif (is_array($other) || $other instanceof Iterator) {
                 foreach ($other as $key => $value) {
@@ -134,7 +134,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param TValue $value
      * @return $this
      */
-    public function push($value) : GenericDictionary
+    public function push($value) : Dictionary
     {
         $this->offsetSet(null, $value);
 
@@ -148,7 +148,7 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
      * @param TValue $value
      * @return $this
      */
-    public function put($key, $value) : GenericDictionary
+    public function put($key, $value) : Dictionary
     {
         $this->offsetSet($key, $value);
 
@@ -158,17 +158,17 @@ class GenericDictionary implements ArrayAccess, Countable, Iterator, Serializabl
     /**
      * Merge two arrays into current Generic. This will fail if some keys or values are of a different type.
      *
-     * @param array|Iterator|GenericDictionary $array
+     * @param array|Iterator|Dictionary $array
      * @return $this
      * @throws InvalidTypeException
      */
-    public function merge($array) : GenericDictionary
+    public function merge($array) : Dictionary
     {
         if (!$this->isCompatible($array)) {
             throw new InvalidTypeException('You cannot merge this array, since it contains incompatible types.');
         }
 
-        if ($array instanceof GenericDictionary) {
+        if ($array instanceof Dictionary) {
             $this->items = array_merge($this->items, $array->items);
         } else {
             foreach ($array as $key => $value) {

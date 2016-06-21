@@ -11,10 +11,10 @@ class you finally can relax.
 
 ## How does it work?
 
-It's pretty easy. You create a ``GenericDictionary`` of whatever types you want:
+It's pretty easy. You create a ``Generics\Dictionary`` of whatever types you want:
 
 ```php
-$list = new Generics\GenericDictionary('string', 'integer', ['foo', 'bar']);
+$list = new Generics\Dictionary('string', 'integer', ['foo', 'bar']);
 ```
 
 And then you're going to use it:
@@ -39,11 +39,11 @@ target the value, the second argument will target the key. As a third option, yo
 Of course, custom classes as types work as well:
 
 ```php
-$newList = new Generics\GenericDictionary(YourObject::class, 'string');
+$newList = new Generics\Dictionary(YourObject::class, 'string');
 $newList['key'] = new YourObject();
 ```
 
-If you're familiar with other languages, think of it as ``GenericDictionary<TValue, TKey>(data);``.
+If you're familiar with other languages, think of it as ``Generics\Dictionary<TValue, TKey>(data);``.
 
 ## Features
 
