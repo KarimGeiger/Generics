@@ -28,7 +28,7 @@ class ArrayList extends Dictionary
      * @param TValue $value
      * @return $this
      */
-    public function push($value) : ArrayList
+    public function push($value) : self
     {
         $this->offsetSet(null, $value);
 

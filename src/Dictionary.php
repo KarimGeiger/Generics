@@ -135,7 +135,7 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
      * @param TValue $value
      * @return $this
      */
-    public function put($key, $value) : Dictionary
+    public function put($key, $value) : self
     {
         $this->offsetSet($key, $value);
 
@@ -149,7 +149,7 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
      * @return $this
      * @throws InvalidTypeException
      */
-    public function merge($array) : Dictionary
+    public function merge($array) : self
     {
         if (!$this->isCompatible($array)) {
             throw new InvalidTypeException('You cannot merge this array, since it contains incompatible types.');
