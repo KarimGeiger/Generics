@@ -46,7 +46,7 @@ $newList[] = new YourObject();
 ```
 
 If you're familiar with other languages, think of it as ``Generics\Dictionary<TKey, TValue>(data);`` and
-``Generics\ArrayList<TValue>(data)``
+``Generics\ArrayList<TValue>(data);``
 
 ## Features
 
