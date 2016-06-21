@@ -7,48 +7,51 @@ PHP is currently stacking up some missing language features. With PHP 7 we've ev
 
 But there's one pretty important thing missing: As soon as you start working with arrays, everything gets lost. You then
 can't be sure if the value or key you're retrieving is of the correct type. Worry no more! With this simple generics
-class you finally can relax.
+classes you finally can relax.
 
 ## How does it work?
 
-It's pretty easy. You create a ``Generics\Dictionary`` of whatever types you want:
+It's pretty easy. You create either a ``Generics\Dictionary`` object, if you'd like to control the types for keys and
+values, or, if you just care about values, create a ``Generics\ArrayList`` object of whatever types you want:
 
 ```php
-$list = new Generics\Dictionary('string', 'integer', ['foo', 'bar']);
+$list = new Generics\Dictionary('string', 'double', ['foo' => 1.5, 'bar' => 13.37]);
 ```
 
 And then you're going to use it:
 
 ```php
-$list[] = 'baz';
+$list['baz'] = 3.14;
 
 var_dump($list->toArray());
-/// [0 => 'foo', 1 => 'bar', 2 => 'baz']
+/// ['foo' => 1.5, 'bar' => 13.37, 'baz' => 3.14]
 ```
 
 But, as soon as something bad happens... 
 
 ```php
-$list['invalid'] = 'string';
-// Generics\Exceptions\InvalidTypeException: Type must be integer, but string was given.
+$list['sample'] = 1;
+// Generics\Exceptions\InvalidTypeException: Type must be double, but integer was given.
 ```
 
-Easy, huh? And of course, this will work with values as well as with keys. The first argument on the constructor will
-target the value, the second argument will target the key. As a third option, you may pre-fill your list.
+Easy, huh? And of course, this will not only work with PHP types, but with your own classes as well.
+The first argument on the constructor will target the key-type, the second argument will target the value-type.
+As a third option, you may pre-fill your list.
 
-Of course, custom classes as types work as well:
+And if you prefer a simple List having integer keys and generic values:
 
 ```php
-$newList = new Generics\Dictionary(YourObject::class, 'string');
-$newList['key'] = new YourObject();
+$newList = new Generics\ArrayList(YourObject::class);
+$newList[] = new YourObject();
 ```
 
-If you're familiar with other languages, think of it as ``Generics\Dictionary<TValue, TKey>(data);``.
+If you're familiar with other languages, think of it as ``Generics\Dictionary<TKey, TValue>(data);`` and
+``Generics\ArrayList<TValue>(data)``
 
 ## Features
 
 This library is as small as it gets. No dependencies. Just plain PHP7. And to keep you safe: You'll get a code coverage
-of 100% percent, since it's important that everything works just as expected.
+of 100%, since it's important that everything works just as expected.
 
 ## Usage
 

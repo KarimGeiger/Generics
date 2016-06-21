@@ -2,15 +2,15 @@
 
 namespace Tests;
 
+use Generics\ArrayList;
 use Generics\Exceptions\InvalidTypeException;
-use Generics\Dictionary;
 use stdClass;
 
 class ValidatorTest extends TestCase
 {
     public function testStringValidator()
     {
-        $generic = new Dictionary('string');
+        $generic = new ArrayList('string');
         $generic[] = 'bar';
         $this->assertEquals('bar', $generic[0]);
 
@@ -20,7 +20,7 @@ class ValidatorTest extends TestCase
 
     public function testIntegerValidator()
     {
-        $generic = new Dictionary('int');
+        $generic = new ArrayList('int');
         $generic[] = 1;
         $this->assertEquals(1, $generic[0]);
 
@@ -30,7 +30,7 @@ class ValidatorTest extends TestCase
 
     public function testDoubleValidator()
     {
-        $generic = new Dictionary('double');
+        $generic = new ArrayList('double');
         $generic[] = 1.0;
         $this->assertEquals(1.0, $generic[0]);
 
@@ -40,7 +40,7 @@ class ValidatorTest extends TestCase
 
     public function testDoubleValidatorAlias()
     {
-        $generic = new Dictionary('float');
+        $generic = new ArrayList('float');
         $generic[] = 1.0;
         $this->assertEquals(1.0, $generic[0]);
 
@@ -50,7 +50,7 @@ class ValidatorTest extends TestCase
 
     public function testBooleanValidator()
     {
-        $generic = new Dictionary('boolean');
+        $generic = new ArrayList('boolean');
         $generic[] = true;
         $generic[] = false;
         $this->assertTrue($generic[0]);
@@ -62,7 +62,7 @@ class ValidatorTest extends TestCase
 
     public function testBooleanValidatorAlias()
     {
-        $generic = new Dictionary('bool');
+        $generic = new ArrayList('bool');
         $generic[] = true;
         $generic[] = false;
         $this->assertTrue($generic[0]);
@@ -74,15 +74,15 @@ class ValidatorTest extends TestCase
 
     public function testObjectValidator()
     {
-        $generic = new Dictionary(stdClass::class);
+        $generic = new ArrayList(stdClass::class);
         $generic[] = new stdClass();
         $this->assertInstanceOf(stdClass::class, $generic[0]);
 
         $this->setExpectedException(
             InvalidTypeException::class,
-            'Type must be stdClass, but Generics\Dictionary was given.'
+            'Type must be stdClass, but Generics\ArrayList was given.'
         );
-        $generic[] = new Dictionary('integer');
+        $generic[] = new ArrayList('integer');
     }
 
     public function testObjectValidatorInvalid()
@@ -91,6 +91,6 @@ class ValidatorTest extends TestCase
             InvalidTypeException::class,
             'This\Class\Does\Not\Exist is an invalid type or does not exist as a class.'
         );
-        new Dictionary('This\Class\Does\Not\Exist');
+        new ArrayList('This\Class\Does\Not\Exist');
     }
 }

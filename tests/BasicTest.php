@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Generics\ArrayList;
 use Generics\Exceptions\InvalidTypeException;
 use Generics\Dictionary;
 
@@ -9,11 +10,11 @@ class BasicTest extends TestCase
 {
     public function testDefaultScenario()
     {
-        $generic = new Dictionary('string', 'integer', [1 => 'bar']);
+        $generic = new Dictionary('integer', 'string', [1 => 'bar']);
         $this->assertEquals(['integer', 'string'], $generic->getTypes());
 
         $generic->put(2, 'foo');
-        $generic->push('baz');
+        $generic->put(3, 'baz');
 
         $this->assertEquals([1 => 'bar', 2 => 'foo', 3 => 'baz'], $generic->toArray());
 
@@ -66,7 +67,7 @@ class BasicTest extends TestCase
             4 => 'more',
             5 => 'data'
         ];
-        $generic = new Dictionary('string', 'integer', $expected);
+        $generic = new Dictionary('integer', 'string', $expected);
         $new = unserialize(serialize($generic));
         $this->assertInstanceOf(Dictionary::class, $new);
         $this->assertEquals($expected, $new->toArray());
@@ -83,12 +84,24 @@ class BasicTest extends TestCase
 
     public function testRecursion()
     {
-        $generic = new Dictionary(Dictionary::class);
-        $generic[] = new Dictionary('string');
+        $generic = new ArrayList(ArrayList::class);
+        $generic[] = new ArrayList('string');
         $generic[0][] = 'foo';
 
         $this->assertEquals('foo', $generic[0][0]);
         $this->setExpectedException(InvalidTypeException::class, 'Type must be string, but integer was given.');
         $generic[0][] = 1;
+    }
+
+    public function testArrayList()
+    {
+        $generic = new ArrayList('string', ['foo', 'bar']);
+        $generic[] = 'baz';
+        $generic[1] = 'foo';
+        $generic->push('bar')[1] = 'baz';
+
+        $this->assertEquals(['foo', 'baz', 'baz', 'bar'], $generic->toArray());
+        $this->setExpectedException(InvalidTypeException::class, 'Type must be string, but double was given.');
+        $generic->push(1.5);
     }
 }

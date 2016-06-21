@@ -44,18 +44,18 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
     const DEFAULT_VALIDATOR = ObjectValidator::class;
 
     /**
-     * Generic constructor. Allowed types for TValue/TKey:
+     * Generic constructor. Allowed types for TKey/TValue:
      * * boolean/bool
      * * integer/int
      * * double/float
      * * string
      * * [any class, e.g.: stdClass/Generic/...]
      *
-     * @param string $TValue Type for each item. This will be returned instead of TValue.
      * @param string $TKey Type for each key. This will be returned instead of TKey.
+     * @param string $TValue Type for each item. This will be returned instead of TValue.
      * @param array|Iterator|Dictionary $data Data to fill. Must be compatible.
      */
-    public function __construct(string $TValue, string $TKey = 'integer', $data = null)
+    public function __construct(string $TKey, string $TValue, $data = [])
     {
         $this->valueValidator = $this->getValidatorFor($TValue);
         $this->keyValidator = $this->getValidatorFor($TKey);
@@ -126,19 +126,6 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
         $this->offsetUnset($key);
 
         return $value;
-    }
-
-    /**
-     * Push item. Only possible when using integer as TKey.
-     *
-     * @param TValue $value
-     * @return $this
-     */
-    public function push($value) : Dictionary
-    {
-        $this->offsetSet(null, $value);
-
-        return $this;
     }
 
     /**
@@ -295,10 +282,9 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
      */
     protected function validateEntry($key, $value) : bool
     {
-        if (is_null($key) && !$this->keyValidator instanceof IntegerValidator) {
-            throw new InvalidTypeException(
-                'Cannot increment keys of type ' . $this->keyValidator->getName() . '. Please specify manually.'
-            );
+        if ($key === null) {
+            throw new InvalidTypeException('Cannot increment keys of type ' . $this->keyValidator->getName() .
+                '. Please specify manually or use ArrayList.');
         }
 
         if (!$this->valueValidator->isValid($value)) {
@@ -306,7 +292,7 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
             throw InvalidTypeException::forValue($value, $this->valueValidator->getName());
         }
 
-        if (!is_null($key) && !$this->keyValidator->isValid($key)) {
+        if (!$this->keyValidator->isValid($key)) {
             // Key invalid.
             throw InvalidTypeException::forValue($key, $this->keyValidator->getName());
         }
@@ -325,11 +311,7 @@ class Dictionary implements ArrayAccess, Countable, Iterator, Serializable
     {
         $this->validateEntry($key, $value);
 
-        if (is_null($key)) {
-            $this->items[] = $value;
-        } else {
-            $this->items[$key] = $value;
-        }
+        $this->items[$key] = $value;
     }
 
     /**
